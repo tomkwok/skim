@@ -170,6 +170,7 @@ fn real_main() -> Result<i32, std::io::Error> {
     let opts = App::new("sk")
         .author("Jinzhou Zhang<lotabout@gmail.com>")
         .arg(Arg::with_name("help").long("help").short('h'))
+        .arg(Arg::with_name("version").long("version").short('v'))
         .arg(Arg::with_name("bind").long("bind").short('b').multiple(true).takes_value(true))
         .arg(Arg::with_name("multi").long("multi").short('m').multiple(true))
         .arg(Arg::with_name("no-multi").long("no-multi").multiple(true))
@@ -254,7 +255,7 @@ fn real_main() -> Result<i32, std::io::Error> {
     let mut options = parse_options(&opts);
 
     let preview_window_joined = opts.values_of("preview-window").map(|x| x.collect::<Vec<_>>().join(":"));
-    options.preview_window = preview_window_joined.as_ref().map(|x| x.as_str());
+    options.preview_window = preview_window_joined.as_deref();
 
     //------------------------------------------------------------------------------
     // initialize collector
@@ -274,8 +275,8 @@ fn real_main() -> Result<i32, std::io::Error> {
     // read in the history file
     let fz_query_histories = opts.values_of("history").and_then(|vals| vals.last());
     let cmd_query_histories = opts.values_of("cmd-history").and_then(|vals| vals.last());
-    let query_history = fz_query_histories.and_then(|filename| read_file_lines(filename).ok()).unwrap_or_else(|| vec![]);
-    let cmd_history = cmd_query_histories.and_then(|filename| read_file_lines(filename).ok()).unwrap_or_else(|| vec![]);
+    let query_history = fz_query_histories.and_then(|filename| read_file_lines(filename).ok()).unwrap_or_default();
+    let cmd_history = cmd_query_histories.and_then(|filename| read_file_lines(filename).ok()).unwrap_or_default();
 
     if fz_query_histories.is_some() || cmd_query_histories.is_some() {
         options.query_history = &query_history;
@@ -294,8 +295,8 @@ fn real_main() -> Result<i32, std::io::Error> {
     if pre_select_n.is_some() || pre_select_pat.is_some() || pre_select_items.is_some() || pre_select_file.is_some() {
         let first_n = pre_select_n.unwrap_or(0);
         let pattern = pre_select_pat.unwrap_or("");
-        let preset_items = pre_select_items.unwrap_or(vec![]);
-        let preset_file = pre_select_file.and_then(|filename| read_file_lines(filename).ok()).unwrap_or_else(|| vec![]);
+        let preset_items = pre_select_items.unwrap_or_default();
+        let preset_file = pre_select_file.and_then(|filename| read_file_lines(filename).ok()).unwrap_or_default();
 
         let selector = DefaultSkimSelector::default()
             .first_n(first_n)
@@ -388,7 +389,7 @@ fn real_main() -> Result<i32, std::io::Error> {
     Ok(if output.selected_items.is_empty() { 1 } else { 0 })
 }
 
-fn parse_options<'a>(options: &'a ArgMatches) -> SkimOptions<'a> {
+fn parse_options(options: &ArgMatches) -> SkimOptions<'_> {
     SkimOptionsBuilder::default()
         .color(options.values_of("color").and_then(|vals| vals.last()))
         .min_height(options.values_of("min-height").and_then(|vals| vals.last()))
@@ -511,7 +512,7 @@ pub fn filter(
         Ok("") | Err(_) => "find .".to_owned(),
         Ok(val) => val.to_owned(),
     };
-    let query = bin_option.filter.unwrap_or(&"");
+    let query = bin_option.filter.unwrap_or("");
     let cmd = options.cmd.unwrap_or(&default_command);
 
     // output query
