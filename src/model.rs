@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 use std::env;
-
+use std::mem;
 use std::process::Command;
 use std::rc::Rc;
 use std::sync::Arc;
@@ -106,7 +106,7 @@ impl Model {
         };
 
         let theme = Arc::new(ColorTheme::init_from_options(options));
-        let query = Query::from_options(options)
+        let query = Query::from_options(&options)
             .replace_base_cmd_if_not_set(&default_command)
             .theme(theme.clone())
             .build();
@@ -263,7 +263,7 @@ impl Model {
             let first_char = option.chars().next().unwrap_or('A');
 
             // raw string
-            if first_char.is_ascii_digit() {
+            if first_char.is_digit(10) {
                 size = margin_string_to_size(option);
             } else {
                 match option.to_uppercase().as_str() {
@@ -305,7 +305,7 @@ impl Model {
             let ctrl = self.matcher_control.take().unwrap();
             let lock = ctrl.into_items();
             let mut items = lock.lock();
-            let matched = std::mem::take(&mut *items);
+            let matched = mem::replace(&mut *items, Vec::new());
 
             match env.clear_selection {
                 ClearStrategy::DontClear => {}

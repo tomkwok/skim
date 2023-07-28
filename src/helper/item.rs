@@ -27,11 +27,11 @@ pub struct DefaultSkimItem {
     text: AnsiString<'static>,
 
     // Option<Box<_>> to reduce memory use in normal cases where no matching ranges are specified.
-    #[allow(clippy::box_collection)]
+    #[allow(clippy::box_vec)]
     matching_ranges: Option<Box<Vec<(usize, usize)>>>,
 }
 
-impl DefaultSkimItem {
+impl<'a> DefaultSkimItem {
     pub fn new(
         orig_text: String,
         ansi_enabled: bool,

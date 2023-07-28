@@ -326,7 +326,7 @@ impl Skim {
         // input
         let mut input = input::Input::new();
         input.parse_keymaps(&options.bind);
-        input.parse_expect_keys(options.expect.as_deref());
+        input.parse_expect_keys(options.expect.as_ref().map(String::as_str));
 
         let tx_clone = tx.clone();
         let term_clone = term.clone();
@@ -346,11 +346,11 @@ impl Skim {
         //------------------------------------------------------------------------------
         // reader
 
-        let reader = Reader::with_options(options).source(source);
+        let reader = Reader::with_options(&options).source(source);
 
         //------------------------------------------------------------------------------
         // model + previewer
-        let mut model = Model::new(rx, tx, reader, term.clone(), options);
+        let mut model = Model::new(rx, tx, reader, term.clone(), &options);
         let ret = model.start();
         let _ = term.send_event(TermEvent::User(())); // interrupt the input thread
         let _ = input_thread.join();
