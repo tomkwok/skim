@@ -13,3 +13,5 @@
 /bin/*
 .idea/
 .ropeproject/
+
+Cargo.lock
