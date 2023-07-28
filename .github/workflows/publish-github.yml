@@ -2,8 +2,8 @@ name: Publish to Github
 
 on:
   push:
-    branches:
-    - master
+    tags:
+    - 'v*'
 
 jobs:
   create-release:
@@ -14,10 +14,7 @@ jobs:
       run: mkdir artifacts
     - name: Get the release version from the tag
       run: |
-        # Apparently, this is the right way to get a tag name. Really?
-        #
-        # See: https://github.community/t5/GitHub-Actions/How-to-get-just-the-tag-name/m-p/32167/highlight/true#M1027
-        echo "SK_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        echo "SK_VERSION=${GITHUB_SHA::7}" >> $GITHUB_ENV
     - name: Create Release
       id: release
       uses: actions/create-release@v1
