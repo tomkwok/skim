@@ -48,5 +48,8 @@ default = ["cli"]
 cli = ["dep:clap", "dep:atty", "dep:shlex", "dep:env_logger"]
 
 [profile.release]
+opt-level = 3
+strip = true
 lto = true
 debug = false
+codegen-units = 1
