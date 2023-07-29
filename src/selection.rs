@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use tuikit::prelude::{Event as TermEvent, *};
 
-///! Handle the selections of items
+/// Handle the selections of items
 use crate::event::{Event, EventHandler, UpdateScreen};
 use crate::global::current_run_num;
 use crate::item::MatchedItem;

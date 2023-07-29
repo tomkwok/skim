@@ -11,9 +11,10 @@ use crate::{MatchRange, MatchResult, SkimItem};
 use bitflags::_core::cmp::min;
 
 //------------------------------------------------------------------------------
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Default)]
 pub enum FuzzyAlgorithm {
     SkimV1,
+    #[default]
     SkimV2,
     Clangd,
 }
@@ -26,12 +27,6 @@ impl FuzzyAlgorithm {
             "clangd" => FuzzyAlgorithm::Clangd,
             _ => FuzzyAlgorithm::SkimV2,
         }
-    }
-}
-
-impl Default for FuzzyAlgorithm {
-    fn default() -> Self {
-        FuzzyAlgorithm::SkimV2
     }
 }
 
@@ -72,7 +67,7 @@ impl FuzzyEngineBuilder {
     pub fn build(self) -> FuzzyEngine {
         use fuzzy_matcher::skim::SkimMatcher;
         let matcher: Box<dyn FuzzyMatcher> = match self.algorithm {
-            FuzzyAlgorithm::SkimV1 => Box::new(SkimMatcher::default()),
+            FuzzyAlgorithm::SkimV1 => Box::<SkimMatcher>::default(),
             FuzzyAlgorithm::SkimV2 => {
                 let matcher = SkimMatcherV2::default().element_limit(BYTES_1M);
                 let matcher = match self.case {
@@ -146,7 +141,9 @@ impl MatchEngine for FuzzyEngine {
             }
         }
 
-        if matched_result == None {
+        // clippy wrongly suggests "matched_result.as_ref()?;" but we are only returning if none
+        #[allow(clippy::all)]
+        if matched_result.is_none() {
             return None;
         }
 

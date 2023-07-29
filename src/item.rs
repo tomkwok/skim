@@ -1,5 +1,5 @@
-///! An item is line of text that read from `find` command or stdin together with
-///! the internal states, such as selected or not
+//! An item is line of text that read from `find` command or stdin together with
+//! the internal states, such as selected or not
 use std::cmp::min;
 use std::default::Default;
 use std::ops::Deref;
