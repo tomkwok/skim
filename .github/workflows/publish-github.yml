@@ -42,24 +42,24 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        build: [linux, arm, arm-v7, aarch64, macos]
+        build: [linux, linux-arm, linux-arm-v7, linux-aarch64, macos, macos-aarch64]
         include:
         - build: linux
           os: ubuntu-latest
           rust: stable
           target: x86_64-unknown-linux-gnu
           cross: false
-        - build: arm
+        - build: linux-arm
           os: ubuntu-latest
           rust: stable
           target: arm-unknown-linux-gnueabihf
           cross: true
-        - build: arm-v7
+        - build: linux-arm-v7
           os: ubuntu-latest
           rust: stable
           target: armv7-unknown-linux-gnueabihf
           cross: true
-        - build: aarch64
+        - build: linux-aarch64
           os: ubuntu-latest
           rust: stable
           target: aarch64-unknown-linux-gnu
@@ -69,6 +69,11 @@ jobs:
           rust: stable
           target: x86_64-apple-darwin
           cross: false
+        - build: macos-aarch64
+          os: macos-latest
+          rust: stable
+          target: aarch64-apple-darwin
+          cross: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
