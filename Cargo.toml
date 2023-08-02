@@ -20,14 +20,14 @@ name = "sk"
 path = "src/bin/main.rs"
 
 [dependencies]
-nix = "0.24.3"
+nix = { version = "0.24.3", default-features = false }
 atty = { version = "0.2.14", optional = true }
 regex = { version = "0.1.0", package = "regex-lite" }
 lazy_static = "1.4.0"
 shlex = { version = "1.1.0", optional = true }
 unicode-width = "0.1.9"
 log = "0.4.17"
-env_logger = { version = "0.9.0", optional = true }
+env_logger = { version = "0.9.0", optional = true, default-features = false, features = ["termcolor", "atty"] }
 time = "0.3.13"
 clap = { version = "3.2.22", optional = true, features = ["cargo"] }
 tuikit = "0.4.6"

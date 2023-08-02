@@ -15,3 +15,5 @@
 .ropeproject/
 
 Cargo.lock
+
+report.json
