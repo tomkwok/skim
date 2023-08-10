@@ -14,14 +14,13 @@ jobs:
     strategy:
       matrix:
         build: [linux, macos]
+        rust: [stable]
         include:
         - build: linux
           os: ubuntu-latest
-          rust: stable
           target: x86_64-unknown-linux-gnu
         - build: macos
           os: macos-latest
-          rust: stable
           target: x86_64-apple-darwin
     steps:
     - name: Install dependencies (for Linux)
@@ -45,15 +44,14 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE: 1
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
-    - name: Install correct toolchain
-      uses: actions-rs/toolchain@v1
+    - name: Setup Toolchain
+      uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
-        target: ${{ matrix.target }}
-        override: true
+        targets: ${{ matrix.target }}
     - name: Build
       run: cargo build --release
     - name: Run Tests
@@ -61,8 +59,6 @@ jobs:
       env:
         LC_ALL: en_US.UTF-8
         TERM: xterm-256color
-    - name: Cache
-      uses: Swatinem/rust-cache@v1
 
   clippy:
     name: clippy
@@ -70,14 +66,13 @@ jobs:
     strategy:
       matrix:
         build: [linux, macos]
+        rust: [stable]
         include:
         - build: linux
           os: ubuntu-latest
-          rust: stable
           target: x86_64-unknown-linux-gnu
         - build: macos
           os: macos-latest
-          rust: stable
           target: x86_64-apple-darwin
     steps:
     - name: Install dependencies (for Linux)
@@ -101,33 +96,28 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE: 1
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
-    - name: Install correct toolchain
-      uses: actions-rs/toolchain@v1
+    - name: Install rust toolchain
+      uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
-        target: ${{ matrix.target }}
-        override: true
+        targets: ${{ matrix.target }}
         components: clippy
     - name: Clippy
       run: cargo clippy
-    - name: Cache
-      uses: Swatinem/rust-cache@v1
 
   rustfmt:
     name: rustfmt
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
+      uses: actions/checkout@v3
+    - name: Install rust toolchain
+      uses: dtolnay/rust-toolchain@master
       with:
         toolchain: stable
-        override: true
-        profile: minimal
         components: rustfmt
     - name: Check formatting
       run: |
