@@ -83,7 +83,7 @@ impl std::cmp::Eq for MatchedItem {}
 
 impl PartialOrd for MatchedItem {
     fn partial_cmp(&self, other: &Self) -> Option<CmpOrd> {
-        self.rank.partial_cmp(&other.rank)
+        Some(self.cmp(other))
     }
 }
 
