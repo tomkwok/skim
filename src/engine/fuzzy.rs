@@ -8,7 +8,7 @@ use fuzzy_matcher::FuzzyMatcher;
 use crate::item::RankBuilder;
 use crate::{CaseMatching, MatchEngine};
 use crate::{MatchRange, MatchResult, SkimItem};
-use bitflags::_core::cmp::min;
+use std::cmp::min;
 
 //------------------------------------------------------------------------------
 #[derive(Debug, Copy, Clone, Default)]

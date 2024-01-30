@@ -35,7 +35,7 @@ vte = "0.13.0"
 fuzzy-matcher = { git = "https://github.com/tomkwok/fuzzy-matcher" }
 rayon = "1.5.3"
 derive_builder = "0.13.0"
-bitflags = "1.3.2"
+bitflags = "2.4.2"
 # timer = "0.2.0"
 timer = { git = "https://github.com/Yoric/timer.rs", rev = "4ba32a90432c50224d5a2c447cb213e8432b10a8" }
 chrono = { version = "0.4.22", default-features = false }
