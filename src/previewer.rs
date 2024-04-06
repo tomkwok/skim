@@ -135,7 +135,7 @@ impl Previewer {
             (None, None) => false,
             (None, Some(_)) => true,
             (Some(_), None) => true,
-            #[allow(clippy::vtable_address_comparisons)]
+            #[allow(ambiguous_wide_pointer_comparisons)]
             (Some(prev), Some(new)) => !Arc::ptr_eq(prev, new),
         };
 
