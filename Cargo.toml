@@ -32,7 +32,7 @@ time = "0.3.13"
 clap = { version = "3.2.22", optional = true, features = ["cargo"] }
 tuikit = "0.4.6"
 vte = "0.13.0"
-fuzzy-matcher = { git = "https://github.com/tomkwok/fuzzy-matcher" }
+fuzzy-matcher = { git = "https://github.com/tomkwok/skim-fuzzy-matcher" }
 rayon = "1.5.3"
 derive_builder = "0.13.0"
 bitflags = "2.4.2"
