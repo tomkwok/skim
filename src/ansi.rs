@@ -211,6 +211,7 @@ impl ANSIParser {
 pub struct AnsiString<'a> {
     stripped: Cow<'a, str>,
     // attr: start, end
+    #[allow(clippy::type_complexity)]
     fragments: Option<Box<Vec<(Attr, (u32, u32))>>>,
 }
 
@@ -241,7 +242,11 @@ impl<'a> AnsiString<'a> {
         let fragments_empty = fragments.is_empty() || (fragments.len() == 1 && fragments[0].0 == Attr::default());
         Self {
             stripped: Cow::borrowed(stripped),
-            fragments: if fragments_empty { None } else { Some(Box::new(fragments)) },
+            fragments: if fragments_empty {
+                None
+            } else {
+                Some(Box::new(fragments))
+            },
         }
     }
 
@@ -250,7 +255,11 @@ impl<'a> AnsiString<'a> {
         let fragments_empty = fragments.is_empty() || (fragments.len() == 1 && fragments[0].0 == Attr::default());
         Self {
             stripped: Cow::owned(stripped),
-            fragments: if fragments_empty { None } else { Some(Box::new(fragments)) },
+            fragments: if fragments_empty {
+                None
+            } else {
+                Some(Box::new(fragments))
+            },
         }
     }
 
